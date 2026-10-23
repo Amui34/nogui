@@ -4,10 +4,11 @@ Site statique (HTML/CSS/JS), servi par un conteneur Caddy sur le **VPS OVH**,
 derrière le **proxy partagé `amui-proxy`** qui porte le domaine et le HTTPS.
 Même mécanique qu'Oplaa, Wazazoo et RestoStock.
 
-> ⚠️ Le Caddyfile qui tourne sur le VPS n'est **pas** celui du dépôt `amui-proxy`
-> (restostock.fr y a été ajouté à la main). On ajoute donc le bloc nogui **à la
-> main sur le VPS**, puis on le recopie dans le dépôt. **Ne jamais redéployer le
-> proxy depuis le dépôt** tant que les deux ne sont pas réalignés.
+> Le bloc nogui est **déjà dans le dépôt `amui-proxy`** (commit du 23/10, poussé).
+> Sur le VPS, il suffit de faire `git pull` dans le clone du proxy, d'ajouter
+> `NOGUI_DOMAIN=nogui.fr` dans son `.env`, puis `docker compose up -d`.
+> Vérifier d'abord avec `git status` que le clone du VPS est propre (pas de
+> modification locale non commitée) : sinon, reporter le bloc à la main.
 
 ---
 
@@ -40,37 +41,35 @@ Noms de domaine → **nogui.fr** → onglet **Zone DNS** :
 
 | Type | Sous-domaine | Cible |
 |---|---|---|
-| A | *(vide)* | IP du VPS |
-| A | `www` | IP du VPS |
+| A | *(vide)* | `51.178.87.46` |
+| A | `www` | `51.178.87.46` |
 
-Supprimer les anciens A / CNAME / AAAA de ces deux entrées (page d'attente OVH).
-L'IP du VPS est dans `DEPLOY_SSH_HOST` (secrets GitHub des autres projets) ou
-dans l'espace client OVH → VPS.
+`51.178.87.46` est l'IP du VPS (celle d'oplaa.pro, wazazoo.pro, restostock.fr).
+Supprimer les anciens A / CNAME / AAAA de ces deux entrées : au 23/10, nogui.fr
+pointe encore sur `213.186.33.5` (page d'attente OVH).
 
 ## 3. Proxy (sur le VPS, en SSH, une fois)
 
-1. Ouvrir le Caddyfile **réellement monté** par le proxy (vérifier avec
-   `docker inspect` du conteneur caddy, volume `/etc/caddy/Caddyfile`).
-2. Ajouter, sur le modèle des autres blocs :
+```bash
+cd <dossier du clone amui-proxy>
+git status            # doit être propre ; sinon ne pas tirer, reporter le bloc à la main
+git pull
+echo "NOGUI_DOMAIN=nogui.fr" >> .env
+docker compose up -d  # recharge le proxy avec le bloc nogui.fr
+```
 
-   ```caddyfile
-   nogui.fr {
-   	encode zstd gzip
-   	reverse_proxy nogui-app:80
-   }
+Le bloc ajouté (déjà dans le Caddyfile du dépôt) :
 
-   www.nogui.fr {
-   	redir https://nogui.fr{uri} permanent
-   }
-   ```
+```caddyfile
+{$NOGUI_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy nogui-app:80
+}
 
-   (Si le Caddyfile du VPS utilise des variables `{$XXX_DOMAIN}`, ajouter
-   `NOGUI_DOMAIN=nogui.fr` dans son `.env` et dans `environment:` du
-   `compose.yaml` du proxy, et écrire `{$NOGUI_DOMAIN}` à la place de `nogui.fr`.)
-3. Recharger : `cd <dossier du proxy> && docker compose up -d` (ou
-   `docker exec <caddy> caddy reload --config /etc/caddy/Caddyfile`).
-4. Recopier le même bloc dans le dépôt `amui-proxy` local (Caddyfile, `.env.dist`,
-   `compose.yaml`) et commiter — **sans** lancer son workflow de déploiement.
+www.{$NOGUI_DOMAIN} {
+	redir https://{$NOGUI_DOMAIN}{uri} permanent
+}
+```
 
 ## 4. Conteneur nogui (sur le VPS, une fois)
 
@@ -87,10 +86,11 @@ Puis ouvrir https://nogui.fr : le certificat est obtenu au premier accès
 
 ## 5. Déploiement automatique (GitHub, une fois)
 
-Dépôt nogui → Settings → Secrets → Actions :
-`DEPLOY_SSH_HOST`, `DEPLOY_SSH_USER`, `DEPLOY_SSH_KEY`, `DEPLOY_SSH_PORT`
-(défaut 22), `DEPLOY_PATH` (= le dossier du clone sur le VPS, étape 4).
-Mêmes valeurs que pour Oplaa, sauf `DEPLOY_PATH`.
+Dépôt nogui → Settings → Secrets and variables → Actions.
+Déjà renseignés le 23/10 : `DEPLOY_SSH_HOST` (`51.178.87.46`) et `DEPLOY_SSH_PORT` (`22`).
+Restent à créer, mêmes valeurs que dans le dépôt Oplaa : `DEPLOY_SSH_USER`,
+`DEPLOY_SSH_KEY` (la clé privée complète), et `DEPLOY_PATH` (= le dossier du
+clone nogui sur le VPS, étape 4, par exemple `/root/nogui`).
 
 Ensuite : modifier → commit → `git push` → en ligne en ~1 min. Le workflow
 finit par un `curl` HTTPS sur nogui.fr et échoue si le site ne répond pas.
