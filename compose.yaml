@@ -1,0 +1,7 @@
+# Test local du conteneur, sans proxy : http://localhost:8093
+#   docker compose up -d --build
+services:
+  nogui:
+    build: .
+    ports:
+      - "8093:80"

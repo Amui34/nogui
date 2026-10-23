@@ -1,0 +1,21 @@
+# =============================================================================
+# studio nogui — derrière le proxy partagé (amui-proxy)
+# Aucun port publié : le proxy Caddy joint le site via l'alias « nogui-app »
+# sur le réseau Docker « web ».
+#   nogui.fr → nogui-app:80
+#
+#   docker compose -f compose.proxy.yaml up -d --build
+# =============================================================================
+
+services:
+  nogui:
+    build: .
+    restart: unless-stopped
+    networks:
+      web:
+        aliases:
+          - nogui-app
+
+networks:
+  web:
+    external: true

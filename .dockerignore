@@ -1,0 +1,13 @@
+.git
+.github
+.claude
+.DS_Store
+**/.DS_Store
+**/README.txt
+assets/fonts
+a-envoyer-sur-ovh
+logonogui *
+docs
+*.md
+propositions-entete.html
+compose*.yaml

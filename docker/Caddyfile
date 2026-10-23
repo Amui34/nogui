@@ -1,0 +1,19 @@
+{
+	# Pas de HTTPS ici : le proxy partagé (amui-proxy) s'en charge.
+	auto_https off
+	admin off
+}
+
+:80 {
+	root * /srv/site
+	encode zstd gzip
+	file_server
+
+	# Pages HTML et données produits : toujours revalidées (pas de cache navigateur)
+	@fresh path / *.html /data/*
+	header @fresh Cache-Control "no-cache"
+
+	# Images, CSS, JS : cache long (les liens CSS/JS portent un ?v= qui change à chaque modification)
+	@static path /assets/* /css/* /js/*
+	header @static Cache-Control "public, max-age=604800"
+}

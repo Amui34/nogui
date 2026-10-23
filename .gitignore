@@ -1,0 +1,7 @@
+.DS_Store
+**/.DS_Store
+.claude/settings.local.json
+
+# Dossier de travail (captures, originaux) : pas dans le dépôt
+logonogui */
+a-envoyer-sur-ovh/

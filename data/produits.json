@@ -1,0 +1,84 @@
+[
+  {
+    "nom": "medusa",
+    "categorie": "Luminaire",
+    "prix": "Prix sur demande",
+    "image": "assets/produits/medusa.jpg",
+    "badge": "Nouveau",
+    "description": "Lampe à poser à l'abat-jour plissé, qui diffuse une lumière chaude et douce. Existe en rose.",
+    "details": {
+      "Type": "Lampe à poser",
+      "Couleur": "Rose"
+    }
+  },
+  {
+    "nom": "Tabouret Ligne",
+    "categorie": "Mobilier",
+    "prix": 320,
+    "image": "assets/produits/tabouret-ligne.jpg",
+    "badge": "Nouveau",
+    "description": "Un tabouret en chêne massif, assemblé sans vis apparente. Dessiné pour l'atelier, adopté à la maison.",
+    "details": {
+      "Matière": "Chêne massif huilé",
+      "Dimensions": "H 45 × L 38 × P 32 cm",
+      "Fabrication": "Petite série, France"
+    }
+  },
+  {
+    "nom": "Lampe Halo",
+    "categorie": "Luminaire",
+    "prix": 480,
+    "image": "assets/produits/lampe-halo.jpg",
+    "description": "Une lampe à poser dont l'anneau d'acier diffuse une lumière douce et indirecte.",
+    "details": {
+      "Matière": "Acier thermolaqué, LED",
+      "Dimensions": "Ø 32 × H 40 cm",
+      "Couleurs": "Noir, sable"
+    }
+  },
+  {
+    "nom": "Vase Strate",
+    "categorie": "Céramique",
+    "prix": 95,
+    "image": "assets/produits/vase-strate.jpg",
+    "description": "Vase tourné à la main, émail mat. Chaque pièce est unique.",
+    "details": {
+      "Matière": "Grès émaillé",
+      "Dimensions": "Ø 12 × H 24 cm"
+    }
+  },
+  {
+    "nom": "Banc Pli",
+    "categorie": "Mobilier",
+    "prix": 890,
+    "image": "assets/produits/banc-pli.jpg",
+    "description": "Un banc en tôle pliée, aussi à l'aise dans une entrée qu'au pied d'un lit.",
+    "details": {
+      "Matière": "Acier plié, thermolaqué",
+      "Dimensions": "L 120 × P 35 × H 42 cm"
+    }
+  },
+  {
+    "nom": "Plateau Marée",
+    "categorie": "Objets",
+    "prix": 65,
+    "image": "assets/produits/plateau-maree.jpg",
+    "description": "Plateau en frêne aux bords relevés, pour servir ou pour ranger.",
+    "details": {
+      "Matière": "Frêne massif",
+      "Dimensions": "L 40 × P 28 cm"
+    }
+  },
+  {
+    "nom": "Applique Arc",
+    "categorie": "Luminaire",
+    "prix": 260,
+    "image": "assets/produits/applique-arc.jpg",
+    "vendu": true,
+    "description": "Applique murale en laiton brossé, bras orientable.",
+    "details": {
+      "Matière": "Laiton brossé",
+      "Dimensions": "L 45 × H 18 cm"
+    }
+  }
+]
